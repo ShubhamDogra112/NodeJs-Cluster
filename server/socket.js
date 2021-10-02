@@ -1,8 +1,6 @@
 let io;
 module.exports = {
 	init: (httpServer) => {
-		const { setupWorker } = require('@socket.io/sticky');
-		const { createAdapter } = require('@socket.io/cluster-adapter');
 		io = require('socket.io')(httpServer, {
 			cors: {
 				origin: 'http://localhost:8080',
@@ -10,16 +8,18 @@ module.exports = {
 				credentials: true
 			}
 		});
-		io.adapter(createAdapter());
-		setupWorker(io);
 
 		io.on('connection', (socket) => {
 			console.log('Client connected: ' + socket.id);
 
 			socket.on('test', () => {
-				// socket.broadcast.emit('new_user', 'new user connected');
-				io.emit('new_user', 'new user connected');
+				socket.broadcast.emit('new_user', 'new user connected');
 			});
+
+			socket.on('disconnect', () => {
+				console.log("disconnected");
+				socket.broadcast.emit('user_disconnected', 'A user disconnected');
+			 });
 		});
 
 		return io;

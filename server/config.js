@@ -12,4 +12,4 @@ const config = {
         }
     }
 }
-module.exports = config[env];    
+module.exports = config[env.trim()];    

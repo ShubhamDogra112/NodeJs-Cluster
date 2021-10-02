@@ -20,16 +20,16 @@ app.use((err,req,res,next) => {
     return res.status(err.status || 500).json({message:err.message || "Something went wrong"})
 })
 
-// mongoose.connect(db.host , {useNewUrlParser:true , useUnifiedTopology:true})
-// .then(() => {
+mongoose.connect(db.host , {useNewUrlParser:true , useUnifiedTopology:true})
+.then(() => {
     let server = app.listen(port, () => {
         console.log(`Worker ${process.pid} started and connected to DB`);
     })
     const io = require("./socket").init(server);
-// })
-// .catch(err => {
-//     console.log(err);
-// })
+})
+.catch(err => {
+    console.log(err);
+})
 
 
 //for load testing without clustered just run this file
